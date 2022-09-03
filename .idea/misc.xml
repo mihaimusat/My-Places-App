@@ -6,6 +6,7 @@
         <entry key="..\:/Users/mihai/AndroidStudioProjects/MyPlaces/app/src/main/res/drawable/ic_baseline_arrow_back_24.xml" value="0.1175" />
         <entry key="..\:/Users/mihai/AndroidStudioProjects/MyPlaces/app/src/main/res/drawable/shape_button_rounded.xml" value="0.1785" />
         <entry key="..\:/Users/mihai/AndroidStudioProjects/MyPlaces/app/src/main/res/drawable/white_border_shape_rounded_button.xml" value="0.1785" />
+        <entry key="..\:/Users/mihai/AndroidStudioProjects/MyPlaces/app/src/main/res/layout/activity_add_location.xml" value="0.1796875" />
         <entry key="..\:/Users/mihai/AndroidStudioProjects/MyPlaces/app/src/main/res/layout/activity_base.xml" value="0.1796875" />
         <entry key="..\:/Users/mihai/AndroidStudioProjects/MyPlaces/app/src/main/res/layout/activity_intro.xml" value="0.1796875" />
         <entry key="..\:/Users/mihai/AndroidStudioProjects/MyPlaces/app/src/main/res/layout/activity_login.xml" value="0.1" />
@@ -15,6 +16,7 @@
         <entry key="..\:/Users/mihai/AndroidStudioProjects/MyPlaces/app/src/main/res/layout/activity_splash.xml" value="0.1796875" />
         <entry key="..\:/Users/mihai/AndroidStudioProjects/MyPlaces/app/src/main/res/layout/app_bar_main.xml" value="0.16666666666666666" />
         <entry key="..\:/Users/mihai/AndroidStudioProjects/MyPlaces/app/src/main/res/layout/dialog_progress.xml" value="0.22" />
+        <entry key="..\:/Users/mihai/AndroidStudioProjects/MyPlaces/app/src/main/res/layout/item_location.xml" value="0.22" />
         <entry key="..\:/Users/mihai/AndroidStudioProjects/MyPlaces/app/src/main/res/layout/main_content.xml" value="0.1796875" />
         <entry key="..\:/Users/mihai/AndroidStudioProjects/MyPlaces/app/src/main/res/layout/nav_header_main.xml" value="0.1796875" />
         <entry key="..\:/Users/mihai/AndroidStudioProjects/MyPlaces/app/src/main/res/menu/activity_main_drawer.xml" value="0.1796875" />

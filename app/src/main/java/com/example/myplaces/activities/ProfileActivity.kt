@@ -35,11 +35,6 @@ import java.io.IOException
 @Suppress("DEPRECATION")
 class ProfileActivity : BaseActivity() {
 
-    companion object {
-        private const val READ_STORAGE_PERMISSION_CODE = 1
-        private const val PICK_IMAGE_REQUEST_CODE = 2
-    }
-
     private var mySelectedImageFileUri : Uri? = null
     private var myProfileImageURL: String = ""
     private lateinit var myUserDetails: User
@@ -68,12 +63,12 @@ class ProfileActivity : BaseActivity() {
             if(ContextCompat.checkSelfPermission
                     (this, Manifest.permission.READ_EXTERNAL_STORAGE)
                 == PackageManager.PERMISSION_GRANTED) {
-                showImageChooser()
+                Constants.showImageChooser(this)
             } else {
                 ActivityCompat.requestPermissions(
                     this,
                     arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE),
-                    READ_STORAGE_PERMISSION_CODE
+                    Constants.READ_STORAGE_PERMISSION_CODE
                 )
             }
         }
@@ -114,16 +109,11 @@ class ProfileActivity : BaseActivity() {
             .load(user.image)
             .centerCrop()
             .placeholder(R.drawable.ic_user_place_holder)
-            .into(userImage);
+            .into(userImage)
 
         username.text = user.name
         email.text = user.email
 
-    }
-
-    private fun showImageChooser() {
-        val galleryIntent = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
-        startActivityForResult(galleryIntent, PICK_IMAGE_REQUEST_CODE)
     }
 
     @Deprecated("Deprecated in Java")
@@ -132,7 +122,7 @@ class ProfileActivity : BaseActivity() {
         val userImage: CircleImageView = findViewById(R.id.iv_user_image)
 
         if(resultCode == Activity.RESULT_OK
-            && requestCode == PICK_IMAGE_REQUEST_CODE
+            && requestCode == Constants.PICK_IMAGE_REQUEST_CODE
             && data!!.data != null) {
             mySelectedImageFileUri = data.data
 
@@ -142,7 +132,7 @@ class ProfileActivity : BaseActivity() {
                     .load(mySelectedImageFileUri)
                     .centerCrop()
                     .placeholder(R.drawable.ic_user_place_holder)
-                    .into(userImage);
+                    .into(userImage)
             } catch(e: IOException) {
                 e.printStackTrace()
             }
@@ -155,9 +145,9 @@ class ProfileActivity : BaseActivity() {
         grantResults: IntArray
     ) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-        if(requestCode == READ_STORAGE_PERMISSION_CODE) {
+        if(requestCode == Constants.READ_STORAGE_PERMISSION_CODE) {
             if(grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                showImageChooser()
+                Constants.showImageChooser(this)
             }
         } else {
             Toast.makeText(
@@ -167,9 +157,6 @@ class ProfileActivity : BaseActivity() {
         }
     }
 
-    private fun getFileExtension(uri: Uri?) : String? {
-        return MimeTypeMap.getSingleton().getExtensionFromMimeType(contentResolver.getType(uri!!))
-    }
 
     private fun uploadUserImage() {
         showProgressDialog(resources.getString(R.string.please_wait))
@@ -178,7 +165,7 @@ class ProfileActivity : BaseActivity() {
             val storageRef: StorageReference = FirebaseStorage.getInstance().reference
                 .child(
                     "USER_IMAGE" + System.currentTimeMillis()
-                            + "." + getFileExtension(mySelectedImageFileUri)
+                            + "." + Constants.getFileExtension(this, mySelectedImageFileUri)
                 )
             storageRef.putFile(mySelectedImageFileUri!!).addOnSuccessListener { taskSnapshot ->
                 Log.i(

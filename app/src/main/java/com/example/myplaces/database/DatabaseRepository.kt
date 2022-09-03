@@ -3,10 +3,8 @@ package com.example.myplaces.database
 import android.app.Activity
 import android.util.Log
 import android.widget.Toast
-import com.example.myplaces.activities.LoginActivity
-import com.example.myplaces.activities.MainActivity
-import com.example.myplaces.activities.ProfileActivity
-import com.example.myplaces.activities.SignUpActivity
+import com.example.myplaces.activities.*
+import com.example.myplaces.models.Location
 import com.example.myplaces.models.User
 import com.example.myplaces.utils.Constants
 import com.google.firebase.auth.FirebaseAuth
@@ -29,7 +27,7 @@ class DatabaseRepository {
             }
     }
 
-    fun loadUserData(activity: Activity) {
+    fun loadUserData(activity: Activity, readLocationsList: Boolean = false) {
         myDatabaseRepo.collection(Constants.USERS)
             .document(getCurrentUserId())
             .get()
@@ -41,7 +39,7 @@ class DatabaseRepository {
                         activity.userLoginSuccess(loggedInUser)
                     }
                     is MainActivity -> {
-                        activity.updateNavigationUserDetails(loggedInUser)
+                        activity.updateNavigationUserDetails(loggedInUser, readLocationsList)
                     }
                     is ProfileActivity -> {
                         activity.setUserData(loggedInUser)
@@ -85,5 +83,39 @@ class DatabaseRepository {
             }
     }
 
+    fun addLocation(activity: AddLocationActivity, location: Location) {
+        myDatabaseRepo.collection(Constants.LOCATIONS)
+            .document()
+            .set(location, SetOptions.merge())
+            .addOnSuccessListener {
+                Log.i(activity.javaClass.simpleName,"Location was successfully added!")
+                Toast.makeText(activity, "Location added successfully!", Toast.LENGTH_SHORT).show()
+                activity.locationCreatedSuccessfully()
+            }
+            .addOnFailureListener { e ->
+                activity.hideProgressDialog()
+                Toast.makeText(activity, "Error when adding the location!", Toast.LENGTH_SHORT).show()
+            }
+    }
+
+    fun getLocationsList(activity: MainActivity) {
+        myDatabaseRepo.collection(Constants.LOCATIONS)
+            .whereEqualTo(Constants.CREATED_BY, getCurrentUserId())
+            .get()
+            .addOnSuccessListener {
+                    document ->
+                Log.i(activity.javaClass.simpleName, document.documents.toString())
+                val locationList: ArrayList<Location> = ArrayList()
+                for (i in document.documents) {
+                    val location = i.toObject(Location::class.java)!!
+                    location.id = i.id
+                    locationList.add(location)
+                }
+                activity.populateLocationsList(locationList)
+            }.addOnFailureListener { e ->
+                activity.hideProgressDialog()
+                Log.e(activity.javaClass.simpleName, "Error while creating locations list", e)
+            }
+    }
 
 }

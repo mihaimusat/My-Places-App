@@ -78,12 +78,7 @@ class LoginActivity : BaseActivity() {
                 .addOnCompleteListener { task ->
                     hideProgressDialog()
                     if (task.isSuccessful) {
-                        val firebaseUser: FirebaseUser = task.result!!.user!!
-                        Toast.makeText(
-                            this, "You have successfully logged in", Toast.LENGTH_LONG
-                        ).show()
-                        startActivity(Intent(this, MainActivity::class.java))
-                        //DatabaseRepository().loadUserData(this)
+                        DatabaseRepository().loadUserData(this)
                     } else {
                         Toast.makeText(
                             this,
