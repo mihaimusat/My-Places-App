@@ -10,15 +10,17 @@ data class Location (
     val description : String = "",
     val image : String = "",
     val createdBy: String = "",
-    // val latitude : Double = 0.0
-    // val longitude : Double = 0.0
+    var latitude : Double = 0.0,
+    var longitude : Double = 0.0
 ) : Parcelable {
     constructor(parcel: Parcel) : this(
         parcel.readString()!!,
         parcel.readString()!!,
         parcel.readString()!!,
         parcel.readString()!!,
-        parcel.readString()!!
+        parcel.readString()!!,
+        parcel.readDouble(),
+        parcel.readDouble()
     ) {
     }
 
@@ -28,6 +30,8 @@ data class Location (
         parcel.writeString(description)
         parcel.writeString(image)
         parcel.writeString(createdBy)
+        parcel.writeDouble(latitude)
+        parcel.writeDouble(longitude)
     }
 
     override fun describeContents(): Int {

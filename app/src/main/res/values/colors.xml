@@ -13,4 +13,6 @@
     <color name="snackbar_error_color">#F72400</color>
     <color name="colorPrimary">#EAD51E</color>
     <color name="divider_color">#EAEAEA</color>
+    <color name="detail_screen_description_text_color">#757575</color>
+    <color name="edit_color">#FF3700B3</color>
 </resources>

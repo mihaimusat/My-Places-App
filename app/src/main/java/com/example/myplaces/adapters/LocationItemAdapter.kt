@@ -1,6 +1,8 @@
 package com.example.myplaces.adapters
 
+import android.app.Activity
 import android.content.Context
+import android.content.Intent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -8,6 +10,7 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.myplaces.R
+import com.example.myplaces.activities.AddLocationActivity
 import com.example.myplaces.models.Location
 
 open class LocationItemAdapter(private val context : Context,
@@ -41,12 +44,23 @@ open class LocationItemAdapter(private val context : Context,
         }
     }
 
+    fun notifyEditItem(activity: Activity, position: Int, requestCode: Int) {
+        val intent = Intent(context, AddLocationActivity::class.java)
+        //intent.putExtra(MainActivity.EDIT_LOCATION_DETAILS, list[position])
+        activity.startActivityForResult(intent, requestCode)
+        notifyItemChanged(position)
+    }
+
     override fun getItemCount(): Int {
         return list.size
     }
 
     interface OnclickListener{
         fun onClick(position: Int, model: Location)
+    }
+
+    fun setOnClickListener(onClickListener: OnclickListener){
+        this.onClickListener = onClickListener
     }
 
     private class MyViewHolder(view: View, ) : RecyclerView.ViewHolder(view) {

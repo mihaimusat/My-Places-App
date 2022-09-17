@@ -6,7 +6,6 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Build
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.view.WindowInsets
@@ -22,6 +21,10 @@ import com.example.myplaces.R
 import com.example.myplaces.database.DatabaseRepository
 import com.example.myplaces.models.Location
 import com.example.myplaces.utils.Constants
+import com.google.android.libraries.places.api.Places
+import com.google.android.libraries.places.api.model.Place
+import com.google.android.libraries.places.widget.Autocomplete
+import com.google.android.libraries.places.widget.model.AutocompleteActivityMode
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
 import de.hdodenhof.circleimageview.CircleImageView
@@ -33,6 +36,8 @@ class AddLocationActivity : BaseActivity() {
     private var mySelectedImageFileUri: Uri? = null
     private lateinit var myUserName: String
     private var myLocationImageURL: String = ""
+    private var mLatitude: Double = 0.0
+    private var mLongitude: Double = 0.0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -52,6 +57,10 @@ class AddLocationActivity : BaseActivity() {
 
         if (intent.hasExtra(Constants.NAME)) {
             myUserName = intent.getStringExtra(Constants.NAME)!!
+        }
+
+        if (!Places.isInitialized()) {
+            Places.initialize(this, resources.getString(R.string.google_maps_api_key))
         }
 
         val locationImage: CircleImageView = findViewById(R.id.iv_location_image)
@@ -79,6 +88,22 @@ class AddLocationActivity : BaseActivity() {
                 addLocation()
             }
         }
+
+        val locationName: AppCompatEditText = findViewById(R.id.et_location_name)
+        locationName.setOnClickListener {
+            try {
+                    val fields = listOf(
+                        Place.Field.ID, Place.Field.NAME, Place.Field.LAT_LNG, Place.Field.ADDRESS
+                    )
+                    val intent =
+                        Autocomplete.IntentBuilder(AutocompleteActivityMode.FULLSCREEN, fields)
+                            .build(this)
+                    startActivityForResult(intent, Constants.PLACE_AUTOCOMPLETE_REQUEST_CODE)
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }
+        }
+
     }
 
     private fun setupActionBar() {
@@ -95,10 +120,10 @@ class AddLocationActivity : BaseActivity() {
         addLocationToolbar.setNavigationOnClickListener { onBackPressed() }
     }
 
-    @Deprecated("Deprecated in Java")
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         val locationImage: CircleImageView = findViewById(R.id.iv_location_image)
+        val location: AppCompatEditText = findViewById(R.id.et_location_name)
 
         if (resultCode == Activity.RESULT_OK
             && requestCode == Constants.PICK_IMAGE_REQUEST_CODE
@@ -116,6 +141,14 @@ class AddLocationActivity : BaseActivity() {
             } catch (e: IOException) {
                 e.printStackTrace()
             }
+        }
+        else if (resultCode == Activity.RESULT_OK &&
+            requestCode == Constants.PLACE_AUTOCOMPLETE_REQUEST_CODE
+        ) {
+            val place: Place = Autocomplete.getPlaceFromIntent(data!!)
+            location.setText(place.address)
+            mLatitude = place.latLng!!.latitude
+            mLongitude = place.latLng!!.longitude
         }
     }
 
@@ -155,7 +188,9 @@ class AddLocationActivity : BaseActivity() {
             name = locationName.text.toString(),
             description = locationDescription.text.toString(),
             image = myLocationImageURL,
-            createdBy = locationCreator
+            createdBy = locationCreator,
+            latitude = mLatitude,
+            longitude = mLongitude
         )
 
         DatabaseRepository().addLocation(this, location)

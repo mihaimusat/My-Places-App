@@ -2,7 +2,6 @@ package com.example.myplaces.activities
 
 import android.app.Activity
 import android.content.Intent
-import android.content.SharedPreferences
 import android.os.Build
 import android.os.Bundle
 import android.util.Log
@@ -10,7 +9,6 @@ import android.view.MenuItem
 import android.view.View
 import android.view.WindowInsets
 import android.view.WindowManager
-import android.widget.Button
 import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.appcompat.widget.Toolbar
@@ -20,8 +18,6 @@ import androidx.drawerlayout.widget.DrawerLayout
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import com.bumptech.glide.load.engine.DiskCacheStrategy
-import com.bumptech.glide.signature.ObjectKey
 import com.example.myplaces.R
 import com.example.myplaces.adapters.LocationItemAdapter
 import com.example.myplaces.database.DatabaseRepository
@@ -39,6 +35,7 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
     companion object {
         const val MY_PROFILE_REQUEST_CODE : Int = 11
         const val CREATE_BOARD_REQUEST_CODE: Int = 12
+        var EXTRA_PLACE_DETAILS = "extra_place_details"
     }
 
     private lateinit var myUserName: String
@@ -168,6 +165,14 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
 
             val locationsAdapter = LocationItemAdapter(this, locationsList)
             locationsRecyclerView.adapter = locationsAdapter
+
+            locationsAdapter.setOnClickListener(object: LocationItemAdapter.OnclickListener{
+                override fun onClick(position: Int, model: Location) {
+                    val intent = Intent(this@MainActivity, LocationDetailsActivity::class.java)
+                    intent.putExtra(Constants.LOCATION_ID, model.id)
+                    startActivity(intent)
+                }
+            })
         } else {
             val locationsRecyclerView : RecyclerView = findViewById(R.id.rv_locations_list)
             locationsRecyclerView.visibility = View.GONE

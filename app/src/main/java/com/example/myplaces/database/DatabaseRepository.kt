@@ -118,4 +118,17 @@ class DatabaseRepository {
             }
     }
 
+    fun getLocationDetails(activity: LocationDetailsActivity, locationId: String) {
+        myDatabaseRepo.collection(Constants.LOCATIONS)
+            .document(locationId)
+            .get()
+            .addOnSuccessListener {
+                    document -> Log.i(activity.javaClass.simpleName, document.toString())
+                activity.loadLocationDetails(document.toObject(Location::class.java)!!)
+            }.addOnFailureListener { e ->
+                activity.hideProgressDialog()
+                Log.e(activity.javaClass.simpleName, "Error while creating locations list", e)
+            }
+    }
+
 }
