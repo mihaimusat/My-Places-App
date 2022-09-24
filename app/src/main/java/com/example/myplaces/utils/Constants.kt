@@ -15,6 +15,7 @@ object Constants {
 
     const val LOCATIONS: String = "Locations"
     const val CREATED_BY : String = "createdBy"
+    const val DESCRIPTION: String = "description"
     const val LOCATION_ID: String = "id"
 
     const val READ_STORAGE_PERMISSION_CODE = 1

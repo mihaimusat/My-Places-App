@@ -21,5 +21,8 @@
 
     <style name="Theme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar"/>
     <style name="Theme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light"/>
+    <style name="DialogTheme" parent="Theme.AppCompat.Light.Dialog">
+        <item name="colorAccent">@color/yellow</item>
+    </style>
 
 </resources>

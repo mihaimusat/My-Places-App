@@ -29,7 +29,6 @@ class LocationDetailsActivity : BaseActivity() {
         showProgressDialog(resources.getString(R.string.please_wait))
         DatabaseRepository().getLocationDetails(this, locationId)
 
-
         val viewMapButton: Button = findViewById(R.id.btn_view_on_map)
         viewMapButton.setOnClickListener {
             val intent = Intent(this, MapActivity::class.java)
@@ -57,6 +56,7 @@ class LocationDetailsActivity : BaseActivity() {
         myLocationDetails = location
         val locationImage: AppCompatImageView = findViewById(R.id.iv_location_detail_image)
         val locationDescription: TextView = findViewById(R.id.tv_location_detail_description)
+        val locationDate: TextView = findViewById(R.id.tv_location_detail_date)
 
         hideProgressDialog()
 
@@ -70,5 +70,6 @@ class LocationDetailsActivity : BaseActivity() {
             .into(locationImage)
 
         locationDescription.text = location.description
+        locationDate.text = getString(R.string.location_detail_date_msg, location.date)
     }
 }

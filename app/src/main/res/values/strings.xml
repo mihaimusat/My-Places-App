@@ -27,6 +27,8 @@
     <string name="create">CREATE</string>
     <string name="location_name">Location</string>
     <string name="location_description">Description</string>
+    <string name="location_hint_date">Date</string>
+    <string name="location_detail_date_msg">Visited on: %1$s</string>
     <string name="no_locations_are_available">No locations are available!</string>
 
     <string name="btn_text_view_on_map">VIEW ON MAP</string>

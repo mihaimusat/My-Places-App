@@ -90,6 +90,27 @@
 
                 </com.google.android.material.textfield.TextInputLayout>
 
+                <com.google.android.material.textfield.TextInputLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:boxBackgroundColor="@color/white"
+                    app:boxStrokeColor="@color/yellow"
+                    app:hintTextColor="@color/black"
+                    android:textColorHint="@color/black"
+                    android:layout_marginTop="@dimen/create_location_til_marginTop">
+
+                    <androidx.appcompat.widget.AppCompatEditText
+                        android:id="@+id/et_location_date"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="@string/location_hint_date"
+                        android:textColor="@color/black"
+                        android:inputType="text"
+                        android:focusable="false"
+                        android:focusableInTouchMode="false"
+                        android:textSize="@dimen/et_text_size" />
+                </com.google.android.material.textfield.TextInputLayout>
+
                 <Button
                     android:id="@+id/btn_create"
                     android:layout_width="match_parent"

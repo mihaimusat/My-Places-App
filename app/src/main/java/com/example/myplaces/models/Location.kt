@@ -8,12 +8,14 @@ data class Location (
     var id : String = "",
     val name : String = "",
     val description : String = "",
+    val date: String = "",
     val image : String = "",
     val createdBy: String = "",
     var latitude : Double = 0.0,
     var longitude : Double = 0.0
 ) : Parcelable {
     constructor(parcel: Parcel) : this(
+        parcel.readString()!!,
         parcel.readString()!!,
         parcel.readString()!!,
         parcel.readString()!!,
@@ -28,6 +30,7 @@ data class Location (
         parcel.writeString(id)
         parcel.writeString(name)
         parcel.writeString(description)
+        parcel.writeString(date)
         parcel.writeString(image)
         parcel.writeString(createdBy)
         parcel.writeDouble(latitude)

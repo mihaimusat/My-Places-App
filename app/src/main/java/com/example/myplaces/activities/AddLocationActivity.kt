@@ -2,6 +2,7 @@ package com.example.myplaces.activities
 
 import android.Manifest
 import android.app.Activity
+import android.app.DatePickerDialog
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.net.Uri
@@ -29,6 +30,8 @@ import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
 import de.hdodenhof.circleimageview.CircleImageView
 import java.io.IOException
+import java.text.SimpleDateFormat
+import java.util.*
 
 @Suppress("DEPRECATION")
 class AddLocationActivity : BaseActivity() {
@@ -38,6 +41,9 @@ class AddLocationActivity : BaseActivity() {
     private var myLocationImageURL: String = ""
     private var mLatitude: Double = 0.0
     private var mLongitude: Double = 0.0
+
+    private var cal = Calendar.getInstance()
+    private lateinit var dateSetListener: DatePickerDialog.OnDateSetListener
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -102,6 +108,23 @@ class AddLocationActivity : BaseActivity() {
             } catch (e: Exception) {
                 e.printStackTrace()
             }
+        }
+
+        dateSetListener = DatePickerDialog.OnDateSetListener { _, year, month, dayOfMonth ->
+            cal.set(Calendar.YEAR, year)
+            cal.set(Calendar.MONTH, month)
+            cal.set(Calendar.DAY_OF_MONTH, dayOfMonth)
+            updateLocationDate()
+        }
+
+        val locationDate: AppCompatEditText = findViewById(R.id.et_location_date)
+        locationDate.setOnClickListener {
+            DatePickerDialog(this,
+                R.style.DialogTheme,
+                dateSetListener,
+                cal.get(Calendar.YEAR),
+                cal.get(Calendar.MONTH),
+                cal.get(Calendar.DAY_OF_MONTH)).show()
         }
 
     }
@@ -182,11 +205,14 @@ class AddLocationActivity : BaseActivity() {
 
         val locationName: AppCompatEditText = findViewById(R.id.et_location_name)
         val locationDescription: AppCompatEditText = findViewById(R.id.et_location_description)
+        val locationDate: AppCompatEditText = findViewById(R.id.et_location_date)
         val locationCreator = getCurrentUserId()
 
         val location = Location(
+            id = UUID.randomUUID().toString(),
             name = locationName.text.toString(),
             description = locationDescription.text.toString(),
+            date = locationDate.text.toString(),
             image = myLocationImageURL,
             createdBy = locationCreator,
             latitude = mLatitude,
@@ -224,5 +250,12 @@ class AddLocationActivity : BaseActivity() {
                 hideProgressDialog()
             }
         }
+    }
+
+    private fun updateLocationDate() {
+        val myFormat = "dd.MM.yyyy"
+        val sdf = SimpleDateFormat(myFormat, Locale.getDefault())
+        val locationDate: AppCompatEditText = findViewById(R.id.et_location_date)
+        locationDate.setText(sdf.format(cal.time).toString())
     }
 }

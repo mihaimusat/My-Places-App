@@ -45,6 +45,17 @@
                 android:textSize="@dimen/detail_screen_description_text_size"
                 tools:text="Description" />
 
+            <TextView
+                android:id="@+id/tv_location_detail_date"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/detail_screen_description_margin"
+                android:layout_marginTop="@dimen/detail_screen_description_margin"
+                android:layout_marginEnd="@dimen/detail_screen_description_margin"
+                android:textColor="@color/detail_screen_description_text_color"
+                android:textSize="@dimen/detail_screen_description_text_size"
+                tools:text="Date" />
+
             <Button
                 android:id="@+id/btn_view_on_map"
                 android:layout_width="match_parent"
