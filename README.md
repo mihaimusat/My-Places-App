@@ -1,7 +1,5 @@
 # My-Places-App
 
-This is an application created for the Mobile Computing course at UPB 2022-2023.
-
 ## Main features  
 - login/signup of users using Firebase 
 - user profile (view + update)
